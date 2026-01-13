@@ -1,20 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL.OmanDigitalShop.Models.Products
 {
-    public class Category
+
+    /// <summary>
+    /// موديل الفئة - يحتوي على تصنيفات المنتجات
+    /// </summary>
+
+    public class Category : BaseEntity
     {
-        public int Id { get; set; }
+        // ============================================
+        // الخصائص الأساسية للفئة
+        // ============================================
 
-        public string Name { get; set; }
+        [Required(ErrorMessage = "اسم الفئة مطلوب")]
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
 
-        public string Description { get; set; }
+        [MaxLength(500)]
+        public string? Description { get; set; }
 
-        public IEnumerable<Product> products { get; set; } = new HashSet<Product>();
+        // ============================================
+        // صورة الفئة (اختياري)
+        // ============================================
+
+        public string? ImageUrl { get; set; }
+
+        // ============================================
+        // حالة الفئة
+        // ============================================
+
+        public bool IsActive { get; set; } = true;
+
+        // ============================================
+        // العلاقة مع المنتجات
+        // فئة واحدة يمكن أن تحتوي على عدة منتجات
+        // One-to-Many Relationship
+        // ============================================
+
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
     }
 }

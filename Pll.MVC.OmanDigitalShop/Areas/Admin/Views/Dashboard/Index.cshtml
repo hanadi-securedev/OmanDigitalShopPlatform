@@ -1,0 +1,138 @@
+@* ============================================
+   Oman Smart Marketplace
+   Admin Dashboard
+   ============================================ *@
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">
+                <i class="bi bi-speedometer2 me-2 text-oman-red"></i>
+                Admin Dashboard
+            </h1>
+            <p class="text-muted">Oman Smart Marketplace - Supporting Omani SMEs</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Total Products</h6>
+                            <h3 class="mb-0 fw-bold text-oman-green">@ViewBag.ProductsCount</h3>
+                        </div>
+                        <div class="bg-oman-cream p-3 rounded-circle">
+                            <i class="bi bi-box-seam display-6 text-oman-red"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Categories</h6>
+                            <h3 class="mb-0 fw-bold text-oman-green">@ViewBag.CategoriesCount</h3>
+                        </div>
+                        <div class="bg-oman-cream p-3 rounded-circle">
+                            <i class="bi bi-tags display-6 text-oman-red"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Total Orders</h6>
+                            <h3 class="mb-0 fw-bold text-oman-green">@ViewBag.OrdersCount</h3>
+                        </div>
+                        <div class="bg-oman-cream p-3 rounded-circle">
+                            <i class="bi bi-cart-check display-6 text-oman-red"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Pending Orders</h6>
+                            <h3 class="mb-0 fw-bold text-oman-red">@ViewBag.PendingOrdersCount</h3>
+                        </div>
+                        <div class="bg-oman-cream p-3 rounded-circle">
+                            <i class="bi bi-clock-history display-6 text-oman-red"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-box-seam me-2"></i>Products
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Manage products from Omani SMEs</p>
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-arrow-right me-2"></i>Manage Products
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-tags me-2"></i>Categories
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Organize product categories</p>
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-success">
+                        <i class="bi bi-arrow-right me-2"></i>Manage Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-cart-check me-2"></i>Orders
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">View and manage customer orders</p>
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn btn-warning">
+                        <i class="bi bi-arrow-right me-2"></i>Manage Orders
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

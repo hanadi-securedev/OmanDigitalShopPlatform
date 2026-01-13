@@ -1,0 +1,110 @@
+﻿using BLL.OmanDigitalShop.Context;
+using DAL.OmanDigitalShop.Interface;
+using DAL.OmanDigitalShop.Models.Orders;
+using DAL.OmanDigitalShop.Models.Products;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.OmanDigitalShop.Repositories
+{
+    /// <summary>
+    /// ريبوزيتوري الطلبات
+    /// يحتوي على جميع عمليات الطلبات
+    /// </summary>
+    public class OrderRepository : GenericRepository<Order>, IOrderRepository
+    {
+        // ============================================
+        // Constructor
+        // ============================================
+
+        public OrderRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+
+        // ============================================
+        // عمليات خاصة بالطلبات
+        // ============================================
+
+        /// <summary>
+        /// الحصول على طلب مع جميع التفاصيل
+        /// يشمل عناصر الطلب والمنتجات والمستخدم
+        /// </summary>
+        public async Task<Order?> GetByIdWithDetailsAsync(int id)
+        {
+            return await _dbSet
+                .Include(o => o.AppUser) // المستخدم صاحب الطلب
+                .Include(o => o.OrderItems) // عناصر الطلب
+                    .ThenInclude(oi => oi.Product) // المنتج في كل عنصر
+                .FirstOrDefaultAsync(o => o.Id == id);
+        }
+
+        /// <summary>
+        /// الحصول على جميع الطلبات مع التفاصيل
+        /// </summary>
+        public async Task<IEnumerable<Order>> GetAllWithDetailsAsync()
+        {
+            return await _dbSet
+                .Include(o => o.AppUser)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .OrderByDescending(o => o.OrderDate) // الأحدث أولاً
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// الحصول على طلبات مستخدم معين
+        /// </summary>
+        public async Task<IEnumerable<Order>> GetByUserIdAsync(string userId)
+        {
+            return await _dbSet
+                .Where(o => o.AppUserId == userId)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// الحصول على الطلبات بحالة معينة
+        /// مثال: جميع الطلبات المعلقة
+        /// </summary>
+        public async Task<IEnumerable<Order>> GetByStatusAsync(OrderStatus status)
+        {
+            return await _dbSet
+                .Where(o => o.Status == status)
+                .Include(o => o.AppUser)
+                .Include(o => o.OrderItems)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// تحديث حالة الطلب
+        /// </summary>
+        public async Task UpdateStatusAsync(int orderId, OrderStatus newStatus)
+        {
+            var order = await GetByIdAsync(orderId);
+            if (order != null)
+            {
+                order.Status = newStatus;
+                await UpdateAsync(order);
+            }
+        }
+        public async Task<int> CountAsync()
+        {
+            return await _context.Categories.CountAsync();
+        }
+
+        // ✅ تطبيق ExistsAsync
+        public async Task<bool> ExistsAsync(Expression<Func<Category, bool>> predicate)
+        {
+            return await _context.Categories.AnyAsync(predicate);
+        }
+
+    }
+}

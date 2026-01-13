@@ -1,4 +1,5 @@
-﻿using DAL.OmanDigitalShop.Models.Products;
+﻿using DAL.OmanDigitalShop.Models.Orders;
+using DAL.OmanDigitalShop.Models.Products;
 using DAL.OmanDigitalShop.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -29,11 +30,20 @@ namespace BLL.OmanDigitalShop.Context
         }
 
 
-
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        // جدول الفئات
+        public DbSet<Category> Categories { get; set; }
+
+        // جدول الطلبات
+        public DbSet<Order> Orders { get; set; }
+
+        // جدول عناصر الطلبات
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        // جدول العناوين
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<AppUser> appUsers { get; set; }
+
 
 
     }

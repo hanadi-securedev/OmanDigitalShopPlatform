@@ -1,7 +1,9 @@
-﻿using DAL.OmanDigitalShop.Models.Products.ProudcatsEnum;
+﻿using DAL.OmanDigitalShop.Models.Orders;
+using DAL.OmanDigitalShop.Models.Products.ProudcatsEnum;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,32 +11,62 @@ using System.Threading.Tasks;
 
 namespace DAL.OmanDigitalShop.Models.Products
 {
-    public class Product
+    public class Product : BaseEntity
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        /// <summary>
+        /// موديل المنتج - يحتوي على جميع بيانات المنتج
+        /// </summary>
+
+        // ============================================
+        // الخصائص الأساسية للمنتج
+        // ============================================
+
+        [Required(ErrorMessage = "اسم المنتج مطلوب")]
+        [MaxLength(200)]
+        public string Name { get; set; } = string.Empty;
+
+        [MaxLength(1000)]
         public string? Description { get; set; }
 
-        public int NoInStock { get; set; }
-
-        public int NoOfOrders { get; set; }
-
-        public int NumberOfRefund {  get; set; }
-
+        [Required(ErrorMessage = "السعر مطلوب")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        public bool HasDiscount { get; set; }
+        // ============================================
+        // خصائص المخزون
+        // ============================================
 
-        public DiscountCat discountType { get; set; }
+        public int StockQuantity { get; set; } = 0;
 
-        public DateTime CreatedAt { get; set; }
+        // ============================================
+        // خصائص الصورة
+        // ============================================
 
-        //navigational and relational
-        [ForeignKey(nameof(category))]
+        public string? ImageUrl { get; set; }
+
+        // ============================================
+        // خصائص الحالة والتواريخ
+        // ============================================
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        // ============================================
+        // العلاقة مع الفئة (Category)
+        // كل منتج ينتمي لفئة واحدة
+        // ============================================
+
+        [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
 
-        public Category? category { get; set; }
+        public virtual Category? Category { get; set; }
 
+        // ============================================
+        // العلاقة مع عناصر الطلب (OrderItems)
+        // منتج واحد يمكن أن يكون في عدة طلبات
+        // ============================================
 
-    }
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    } 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -7,13 +8,46 @@ using System.Threading.Tasks;
 
 namespace DAL.OmanDigitalShop.Models.Users
 {
-    public class Address
+    /// <summary>
+    /// موديل العنوان - يحتوي على عناوين التوصيل
+    /// </summary>
+    public class Address : BaseEntity
     {
-        public string Id { get; set; }
+        // ============================================
+        // تفاصيل العنوان
+        // ============================================
 
+        [Required(ErrorMessage = "العنوان مطلوب")]
+        [MaxLength(200)]
+        public string Street { get; set; } = string.Empty;
 
-        [ForeignKey(nameof(appUser))]
-        public string AppUserId { get; set; }
-        public AppUser appUser { get; set; }
+        [Required(ErrorMessage = "المدينة مطلوبة")]
+        [MaxLength(100)]
+        public string City { get; set; } = string.Empty;
+
+        [MaxLength(100)]
+        public string? State { get; set; }
+
+        [MaxLength(20)]
+        public string? PostalCode { get; set; }
+
+        [MaxLength(100)]
+        public string Country { get; set; } = "Oman";
+
+        // ============================================
+        // هل هذا العنوان الافتراضي؟
+        // ============================================
+
+        public bool IsDefault { get; set; } = false;
+
+        // ============================================
+        // العلاقة مع المستخدم
+        // كل عنوان ينتمي لمستخدم واحد
+        // ============================================
+
+        [ForeignKey(nameof(AppUser))]
+        public string AppUserId { get; set; } = string.Empty;
+
+        public virtual AppUser? AppUser { get; set; }
     }
 }
